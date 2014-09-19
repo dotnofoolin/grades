@@ -1,0 +1,13 @@
+{
+  "name": "Grades",
+  "version": "1.0.0",
+  "authors": [
+    "Josh Burks <dotnofoolin@gmail.com>"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "foundation": "~5.4.4",
+    "foundation-icon-fonts": "*",
+    "chartjs": "~1.0.1-beta.4"
+  }
+}

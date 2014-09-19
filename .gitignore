@@ -1,0 +1,13 @@
+.Python
+__pycache__/
+*.py[cod]
+.DS_Store
+bin/
+lib/
+include/
+.idea
+config.py
+databases/*
+static/*
+!static/site.js
+!static/site.css

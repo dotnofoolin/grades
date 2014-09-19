@@ -1,0 +1,105 @@
+<html>
+    <head>
+        <title>Grades</title>
+
+        <link rel="stylesheet" href="{{ url_for('static', filename='foundation/css/foundation.css') }}" />
+        <link rel="stylesheet" href="{{ url_for('static', filename='foundation-icon-fonts/foundation-icons.css') }}" />
+        <link rel="stylesheet" href="{{ url_for('static', filename='site.css') }}" />
+
+        <script src="{{ url_for('static', filename='foundation/js/vendor/modernizr.js') }}"></script>
+        <script src="{{ url_for('static', filename='foundation/js/vendor/jquery.js') }}"></script>
+        <script src="{{ url_for('static', filename='foundation/js/vendor/fastclick.js') }}"></script>
+        <script src="{{ url_for('static', filename='foundation/js/foundation.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='chartjs/Chart.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='site.js') }}"></script>
+    </head>
+    <body>
+        <nav class="top-bar" data-topbar role="navigation">
+            <ul class="title-area">
+                <li class="name">
+                    <h1><a href="/"><i class="fi-checkbox"></i> Grades</a></h1>
+                </li>
+            </ul>
+        </nav>
+        <dl class="accordion" data-accordion>
+            {% for child in child_class_grades %}
+            <dd class="accordion-navigation">
+                <a href="#panel-{{ child.child_id }}"><i class="fi-torso"></i> {{ child.child_name }} - Overall grade: {{child.overall_grade_letter }} ({{ '%0.0f'| format(child.overall_grade_average|float) }}%)</a>
+                <div id="panel-{{ child.child_id }}" class="content">
+                    <div class="row fullWidth">
+                        <div class="small-3 columns">
+                            <h4 class="subheader">Current Grades</h4>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Class</th>
+                                        <th>Grade</th>
+                                        <th>Average</th>
+                                        <th>Last Updated</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for class_grade in child.grades %}
+                                    <tr>
+                                        <td>
+                                            <div style="border-radius: 50%; width: 10px; height: 10px; background-color: {{ class_grade.color }}; display: inline-block;"></div>
+                                            {{ class_grade.class_name }}
+                                        </td>
+                                        <td>{{ class_grade.grade_letter }}</td>
+                                        <td>{{ '%0.0f'| format(class_grade.grade_average|float) }}%</td>
+                                        <td>
+                                            <a href="#" data-reveal-id="modal-{{ class_grade.grade_id }}">{{ class_grade.post_date }}  <i class="fi-results"></i></a>
+                                            <div id="modal-{{ class_grade.grade_id }}" class="reveal-modal" data-reveal>
+                                                <pre>{{ class_grade.report_text }}</pre>
+                                                <a class="close-reveal-modal">&#215;</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="small-9 columns">
+                            <h4 class="subheader">Trends</h4>
+                            <canvas id="linechart-{{ child.child_id }}" height="400" width="800"></canvas>
+                            <script type="text/javascript">
+
+                                var lineChartData = {
+                                labels : {{ child.chart_labels|safe }},
+                                    datasets : [
+                                    {% for dataset_name in child.chart_data %}
+                                        {
+                                            label: "{{ dataset_name }}",
+                                            strokeColor : "{{ child.chart_colors[dataset_name] }}",
+                                            pointColor : "{{ child.chart_colors[dataset_name] }}",
+                                            pointStrokeColor : "{{ child.chart_colors[dataset_name] }}",
+                                            data : {{ child.chart_data[dataset_name]|tojson|safe }}
+                                        },
+                                    {% endfor %}
+                                    ]
+                                }
+
+                                var lineChartOptions = {
+                                    datasetFill: false,
+                                }
+
+                                var linechart = new Chart(document.getElementById("linechart-{{ child.child_id }}").getContext("2d")).Line(lineChartData, lineChartOptions);
+
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </dd>
+            {% endfor %}
+            <dd class="accordion-navigation">
+                <a href="#panel-about"><i class="fi-info"></i> About</a>
+                <div id="panel-about" class="content">
+                    <p>I wanted a way to aggregate and track my kids grades without having to traverse the entire Edline site everytime. A 15 minute routine has now become a 5 second routine.</p>
+                    <p>Inspired by XKCD <a href="http://xkcd.com/1205/">1205</a> and <a href="http://xkcd.com/974/">974</a></p>
+                    <p>Josh Burks - dotnofoolin@gmail.com - <a href="https://github.com/dotnofoolin">https://github.com/dotnofoolin</a></p>
+                </div>
+            </dd>
+        </dl>
+    </body>
+</html>
