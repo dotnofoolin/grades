@@ -1,5 +1,9 @@
-<html>
+<!DOCTYPE html>
+<html class="no-js" lang="en">
     <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
         <title>Grades</title>
 
         <link rel="stylesheet" href="{{ url_for('static', filename='foundation/css/foundation.css') }}" />
@@ -27,7 +31,7 @@
                 <a href="#panel-{{ child.child_id }}"><i class="fi-torso"></i> {{ child.child_name }} - Overall grade: {{child.overall_grade_letter }} ({{ '%0.0f'| format(child.overall_grade_average|float) }}%)</a>
                 <div id="panel-{{ child.child_id }}" class="content">
                     <div class="row fullWidth">
-                        <div class="small-3 columns">
+                        <div class="small-12 large-4 columns">
                             <h4 class="subheader">Current Grades</h4>
                             <table>
                                 <thead>
@@ -60,7 +64,7 @@
                             </table>
                         </div>
 
-                        <div class="small-9 columns">
+                        <div class="small-12 large-8 columns">
                             <h4 class="subheader">Trends</h4>
                             <canvas id="linechart-{{ child.child_id }}" height="400" width="800"></canvas>
                             <script type="text/javascript">
