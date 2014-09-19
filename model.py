@@ -65,14 +65,14 @@ def save_report(child_name=None, class_name=None, grade_letter=None, grade_avera
     except:
         child_object = Child.get(Child.child_name == child_name)
 
-
     try:
-        try:
-            color = CLASS_COLORS.pop(0)
-        except:
-            color = "#000000"
+        class_object = Class.create(child_table=child_object.id, class_name=class_name, color="#000000")
 
-        class_object = Class.create(child_table=child_object.id, class_name=class_name, color=color)
+        # Get a color, and then put it back in the list. This is how I rotate them.
+        color = CLASS_COLORS.pop(0)
+        CLASS_COLORS.append(color)
+        class_object.color = color
+        class_object.save()
 
     except:
         class_object = Class.get(Class.class_name == class_name, Class.child_table == child_object.id)

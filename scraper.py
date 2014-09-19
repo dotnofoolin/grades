@@ -14,7 +14,7 @@ def log_things(text):
 def get_date_list():
     datelist = ['Today', 'Yesterday']
 
-    for days_ago in range(2, 5):
+    for days_ago in range(2, DAYS_AGO_TO_CHECK):
         datediff = date.today()-timedelta(days=days_ago)
         datestr = datediff.strftime('%b') + ' ' + datediff.strftime('%d').lstrip('0')
         datelist.append(datestr)
@@ -188,6 +188,8 @@ def run_scraper():
 
 if __name__ == '__main__':
     run_scraper()
+
+    print("Completed at {}".format(datetime.now()))
 
 
 

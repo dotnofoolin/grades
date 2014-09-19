@@ -7,4 +7,7 @@ SCHOOL_URL = ''
 DEBUG = False
 
 # These are the colors that get saved to the database when a class gets created.
-CLASS_COLORS = ['#F7464B', '#F99647', '#2B9793', '#40CA39', '#949FB1', '#4D5360', '#000000']
+CLASS_COLORS = ['#F7464B', '#F99647', '#2B9793', '#40CA39', '#949FB1', '#4D5360', '#C6388B', '#109209', '#B30A0E', '#B5560B', '#2B9793', '#900858']
+
+# This determines how far back the scraper will go to find reports. 5 days is a good number. Tune as needed.
+DAYS_AGO_TO_CHECK = 5
