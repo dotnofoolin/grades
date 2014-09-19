@@ -4,6 +4,11 @@ Grades App
 Scrapes grades from your schools Edline page for each child in your account. 
 Displays these grades in an aggregated, quick access, beautiful interface.
 
+Author:
+-------
+* Josh Burks
+* dotnofoolin@gmail.com
+
 Requirements:
 -------------
 * Python 3
@@ -14,10 +19,12 @@ Requirements:
 
 Install:
 --------
-1. git clone
-2. pip install -r requirements.txt
-3. bower install
-4. Edit config.py to your liking
-5. python scraper.py
-6. python app.py
-7. http://localhost:5000
+1. git clone https://github.com/dotnofoolin/grades.git
+2. virtualenv --python=/usr/bin/python3 --no-site-packages grades
+3. cd grades && source bin/activate
+4. pip install -r requirements.txt
+5. bower install
+6. Copy config.py.dist to config.py and edit appropriately
+7. python scraper.py
+8. python app.py
+9. http://localhost:5000
