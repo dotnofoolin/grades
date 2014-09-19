@@ -63,13 +63,15 @@ def index():
         for d in dates:
             chart_labels[d.post_date.strftime('%Y-%m-%d')] = True
 
-            # Manually get the grades for each date, set it to some value (0) if not found
+            # Manually get the grades for each date, set it to some value if not found
             for c in Class.select().join(Child).where(Child.id == child_object.id):
                 try:
                     grade_per_class = Grade.select().where(Grade.post_date == d.post_date, Grade.class_table == c.id).get()
                     chart_data.setdefault(c.class_name, []).append(round(grade_per_class.grade_average, 0))
                 except:
-                    chart_data.setdefault(c.class_name, []).append(0)
+                    # If no grade for this date, just use the average grade for the whole class.
+                    grade_per_class = Grade.select(fn.avg(Grade.grade_average).alias('gpa')).where(Grade.class_table == c.id).get()
+                    chart_data.setdefault(c.class_name, []).append(round(grade_per_class.gpa, 0))
 
                 chart_colors[c.class_name] = c.color
 
