@@ -27,7 +27,7 @@
         </nav>
         <dl class="accordion" data-accordion>
             {% for child in child_class_grades %}
-            <dd class="accordion-navigation">
+            <dd class="accordion-navigation" id="accordion-{{ child.child_id }}">
                 <a href="#panel-{{ child.child_id }}"><i class="fi-torso"></i> {{ child.child_name }} - Overall grade: {{child.overall_grade_letter }} ({{ '%0.0f'| format(child.overall_grade_average|float) }}%)</a>
                 <div id="panel-{{ child.child_id }}" class="content">
                     <div class="row fullWidth">
@@ -69,7 +69,7 @@
                             <canvas id="linechart-{{ child.child_id }}" height="400" width="800"></canvas>
                             <script type="text/javascript">
 
-                                var lineChartData = {
+                                var lineChartData_{{ child.child_id }} = {
                                 labels : {{ child.chart_labels|safe }},
                                     datasets : [
                                     {% for dataset_name in child.chart_data %}
@@ -84,11 +84,17 @@
                                     ]
                                 }
 
-                                var lineChartOptions = {
+                                var lineChartOptions_{{ child.child_id }} = {
                                     datasetFill: false,
+                                    responsive: true,
                                 }
 
-                                var linechart = new Chart(document.getElementById("linechart-{{ child.child_id }}").getContext("2d")).Line(lineChartData, lineChartOptions);
+                                $('#panel-{{ child.child_id }}').on('toggled', function (event, accordion) {
+                                    if($('#accordion-{{ child.child_id }}').hasClass('active')) {
+                                        var ctx_{{ child.child_id }} = document.getElementById("linechart-{{ child.child_id }}").getContext("2d");
+                                        var linechart_{{ child.child_id }} = new Chart(ctx_{{ child.child_id }}).Line(lineChartData_{{ child.child_id }}, lineChartOptions_{{ child.child_id }});
+                                    }
+                                });
 
                             </script>
                         </div>
