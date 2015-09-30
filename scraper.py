@@ -50,7 +50,7 @@ def run_scraper():
 
         # Soupify the school homepage once we are logged in, and get the school name
         result = session.get(SCHOOL_URL)
-        home_soup = bs4.BeautifulSoup(result.text)
+        home_soup = bs4.BeautifulSoup(result.text, 'html.parser')
         school_name = home_soup.find('span', id='edlHomePageDocBoxAreaTitleSpan').text
 
         # Look for "More Classes" from menus...
@@ -75,7 +75,7 @@ def run_scraper():
             log_things('Child ID = {}'.format(child_id))
 
             # Find all the classes and go to them...
-            classes_soup = bs4.BeautifulSoup(result.text)
+            classes_soup = bs4.BeautifulSoup(result.text, 'html.parser')
             for class_link in classes_soup.find_all('a', href=re.compile('^javascript:rlViewItm')):
                 class_name = class_link.find(text=True).strip()
 
@@ -107,7 +107,7 @@ def run_scraper():
                     # Iterate through the item list table...
                     items = {}
                     items_names = {}
-                    items_soup = bs4.BeautifulSoup(result.text)
+                    items_soup = bs4.BeautifulSoup(result.text, 'html.parser')
                     try:
                         items_table = items_soup.find('table', id='directoryList')
                         for row in items_table.find_all('tr', attrs={'class': 'ed-compactTableRow'}):
@@ -148,12 +148,12 @@ def run_scraper():
                         result = session.post('http://www.edline.net/post/ResourceList.page', data=post_params, cookies=cookies, headers={'Referer': SCHOOL_URL})
 
                         # The actual report is in an iframe. Find it and the actual URL of the report.
-                        report_soup = bs4.BeautifulSoup(result.text)
+                        report_soup = bs4.BeautifulSoup(result.text, 'html.parser')
                         for report in report_soup.find_all('iframe', id='docViewBodyFrame'):
                             result = session.get(report['src'])
 
                             # The report is contained in a pre tag.
-                            final_soup = bs4.BeautifulSoup(result.text)
+                            final_soup = bs4.BeautifulSoup(result.text, 'html.parser')
                             final_pre = final_soup.find('pre')
 
                             # Parse out the good bits.
