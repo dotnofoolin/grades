@@ -156,10 +156,20 @@ def run_scraper():
                             final_soup = bs4.BeautifulSoup(result.text, 'html.parser')
                             final_pre = final_soup.find('pre')
 
-                            # Parse out the good bits.
+                            # Parse out the child name.
                             child_name = re.search('Progress Report for (.+)', final_pre.text).group(1).strip()
-                            grade_letter = re.search('Final Grade: (..)', final_pre.text).group(1).strip()
-                            grade_average = re.search('Final Average: (\d*\.?\d*)', final_pre.text).group(1).strip()
+
+                            # Parse out the grade letter. Sometimes it's at the top, sometimes not.
+                            try:
+                                grade_letter = re.search('Final Grade: (..)', final_pre.text).group(1).strip()
+                            except AttributeError:
+                                grade_letter = re.search('Term #\d\s*Subtotal\s*\d+.\d\s?\d+\s+([ABCDF])', final_pre.text).group(1).strip()
+
+                            # Parse out the grade average. Sometimes it's at the top, sometimes not.
+                            try:
+                                grade_average = re.search('Final Average: (\d*\.?\d*)', final_pre.text).group(1).strip()
+                            except AttributeError:
+                                grade_average = re.search('Term #\d\s*Subtotal\s*(\d+.\d)', final_pre.text).group(1).strip()
 
                             # Here's the final results!
                             log_things('{}-{}-{}-{}-{}-{}'.format(child_name, class_name, grade_letter, grade_average, desc, item_name))
