@@ -112,9 +112,13 @@ def run_scraper():
                         items_table = items_soup.find('table', id='directoryList')
                         for row in items_table.find_all('tr', attrs={'class': 'ed-compactTableRow'}):
                             cols = row.find_all('td', attrs={'class': 'ed-userListCellBody'})
-                            item_link = cols[1].find_all('a', href=re.compile('^javascript:submitEvent'))[0]
-                            item_name = item_link.text.strip()
-                            item_id = re.search('folderEntid=(\d+)', item_link['href']).group(1)
+                            try:
+                                item_link = cols[1].find_all('a', href=re.compile('^javascript:submitEvent'))[0]
+                                item_name = item_link.text.strip()
+                                item_id = re.search('folderEntid=(\d+)', item_link['href']).group(1)
+                            except:
+                                log_things('        Non-grades link found. Skipping')
+
                             item_date = cols[2].find('span').text
 
                             # Only look for things updated within the last few days.
@@ -163,13 +167,13 @@ def run_scraper():
                             try:
                                 grade_letter = re.search('Final Grade: (..)', final_pre.text).group(1).strip()
                             except AttributeError:
-                                grade_letter = re.search('Term #\d\s*Subtotal\s*\d+.\d\s?\d+\s+([ABCDF])', final_pre.text).group(1).strip()
+                                grade_letter = re.search('Term #3\s*Subtotal\s*\d+.\d\s+\d+\s+\d+\s+([ABCDF])', final_pre.text).group(1).strip()
 
                             # Parse out the grade average. Sometimes it's at the top, sometimes not.
                             try:
                                 grade_average = re.search('Final Average: (\d*\.?\d*)', final_pre.text).group(1).strip()
                             except AttributeError:
-                                grade_average = re.search('Term #\d\s*Subtotal\s*(\d+.\d)', final_pre.text).group(1).strip()
+                                grade_average = re.search('Term #3\s*Subtotal\s*(\d+.\d)', final_pre.text).group(1).strip()
 
                             # Here's the final results!
                             log_things('{}-{}-{}-{}-{}-{}'.format(child_name, class_name, grade_letter, grade_average, desc, item_name))
