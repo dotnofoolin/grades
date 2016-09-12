@@ -1,6 +1,7 @@
 # Your Edline credentials go here. SCHOOL_URL is the school page that you get right after you login.
 USERNAME = ''
 PASSWORD = ''
+BASE_URL = 'https://www.edline.net'
 SCHOOL_URL = ''
 
 # Set to True to get the scraper to be more verbose
