@@ -201,26 +201,23 @@ def iterate_items_save_results(raw_html, session, cookies, class_name):
             # Parse out the child name.
             child_name = re.search('Progress Report for (.+)', final_pre.text).group(1).strip()
 
-            # TODO: handle all terms. Find them and figure out the newest one.
-            # TODO: ditch all the try/excepts
-
-            # Parse out the grade letter. Sometimes it's at the top, sometimes not.
+            # Parse out the grade letter. Look at the Term line at the bottom of the report
             try:
-                grade_letter = re.search('Final Grade: (..)', final_pre.text).group(1).strip()
+                # Terms are listed oldest to newest, so overwritting grade_average through the loop will get us the newest one
+                for match in re.findall('Term #\d.*\d+\s+([ABCDF])', final_pre.text):
+                    grade_letter = match.strip()
             except AttributeError:
-                try:
-                    grade_letter = re.search('Term\d Grade\s*: ([ABCDF])', final_pre.text).group(1).strip()
-                except AttributeError:
-                    grade_letter = re.search('Term #\d\s*Subtotal\s*\d+.\d\s?\d+\s+([ABCDF])', final_pre.text).group(1).strip()
+                log_things('CANNOT FIND GRADE LETTER FOR {} -- {}'.format(child_name, class_name))
+                break
 
-            # Parse out the grade average. Sometimes it's at the top, sometimes not.
+            # Parse out the grade average. Look at the Term line at the bottom of the report
             try:
-                grade_average = re.search('Final Average: (\d*\.?\d*)', final_pre.text).group(1).strip()
+                # Terms are listed oldest to newest, so overwritting grade_average through the loop will get us the newest one
+                for match in re.findall('Term #\d.*\s+(\d+)\s+[ABCDF]', final_pre.text):
+                    grade_average = match.strip()
             except AttributeError:
-                try:
-                    grade_average = re.search('Term\d Average: (\d+.\d)', final_pre.text).group(1).strip()
-                except AttributeError:
-                    grade_average = re.search('Term #\d\s*Subtotal\s*(\d+.\d)', final_pre.text).group(1).strip()
+                log_things('CANNOT FIND GRADE AVERAGE FOR {} -- {}'.format(child_name, class_name))
+                break
 
             # Here's the final results!
             log_things('{}-{}-{}-{}-{}-{}'.format(child_name, class_name, grade_letter, grade_average, desc, item_name))
