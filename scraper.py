@@ -137,7 +137,6 @@ def run_scraper():
                     result = session.post(BASE_URL + '/post/GroupHome.page', data=post_params,
                                           cookies=cookies, headers={'Referer': SCHOOL_URL})
 
-                    # TODO: need class_name from somewhere
                     iterate_items_save_results(result, session, cookies, class_name)
 
 
