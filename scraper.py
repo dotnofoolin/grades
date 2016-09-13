@@ -202,6 +202,7 @@ def iterate_items_save_results(raw_html, session, cookies, class_name):
 
             # Parse out the grade letter. Look at the Term line at the bottom of the report
             try:
+                grade_letter = None
                 # Terms are listed oldest to newest, so overwritting grade_average through the loop will get us the newest one
                 for match in re.findall('Term #\d.*\d+\s+([ABCDF])', final_pre.text):
                     grade_letter = match.strip()
@@ -211,6 +212,7 @@ def iterate_items_save_results(raw_html, session, cookies, class_name):
 
             # Parse out the grade average. Look at the Term line at the bottom of the report
             try:
+                grade_average = None
                 # Terms are listed oldest to newest, so overwritting grade_average through the loop will get us the newest one
                 for match in re.findall('Term #\d.*\s+(\d+)\s+[ABCDF]', final_pre.text):
                     grade_average = match.strip()
@@ -231,7 +233,7 @@ def iterate_items_save_results(raw_html, session, cookies, class_name):
                 desc = yesterday.strftime('%b') + ' ' + yesterday.strftime('%d').lstrip('0')
 
             # Persist the results to the database, but only if we have a valid grade letter
-            if grade_letter != '**':
+            if grade_letter != '**' and grade_letter != None and grade_average != None:
                 save_report(
                     child_name=child_name,
                     class_name=class_name,
