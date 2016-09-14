@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title>Grades</title>
+
+        <link rel="stylesheet" href="{{ url_for('static', filename='foundation-sites/dist/foundation.min.css') }}" />
+        <link rel="stylesheet" href="{{ url_for('static', filename='foundation-icon-fonts/foundation-icons.css') }}" />
+        <link rel="stylesheet" href="{{ url_for('static', filename='site.css') }}" />
+
+        <script src="{{ url_for('static', filename='jquery/dist/jquery.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='what-input/what-input.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='foundation-sites/dist/foundation.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='chart.js/dist/Chart.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='site.js') }}"></script>
+    </head>
+    <body>
+        <div class="top-bar">
+            <div class="top-bar-left">
+                <ul class="dropdown menu" data-dropdown-menu>
+                    <li class="menu-text">
+                        <h4><a href="/"><i class="fi-checkbox"></i> Grades</a></h4>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        {% block content %}{% endblock %}
+    </body>
+</html>
