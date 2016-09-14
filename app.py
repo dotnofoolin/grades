@@ -23,6 +23,13 @@ def avg_to_letter(grade_average):
     return grade_letter
 
 
+@app.route("/report/<int:grade_id>")
+def report(grade_id):
+    grade = Grade.get(Grade.id == grade_id)
+
+    return render_template("report.html", report_text=grade.report_text)
+
+
 @app.route("/")
 def index():
     # This is the data struct to send to the template. It's big!
