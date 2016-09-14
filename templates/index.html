@@ -58,10 +58,10 @@
                                 responsive: true,
                             }
 
-                            $('#panel-{{ child.child_id }}').on('toggled', function (event, accordion) {
-                                if($('#accordion-{{ child.child_id }}').hasClass('active')) {
+                            $('#accordion-{{ child.child_id }}').on('click', function (event, accordion) {
+                                if($('#accordion-{{ child.child_id }}').hasClass('is-active')) {
                                     var ctx_{{ child.child_id }} = document.getElementById("linechart-{{ child.child_id }}").getContext("2d");
-                                    var linechart_{{ child.child_id }} = new Chart(ctx_{{ child.child_id }}).Line(lineChartData_{{ child.child_id }}, lineChartOptions_{{ child.child_id }});
+                                    var linechart_{{ child.child_id }} = new Chart(ctx_{{ child.child_id }}, { type: 'line', data: lineChartData_{{ child.child_id }}, options: lineChartOptions_{{ child.child_id }} });
                                 }
                             });
 
