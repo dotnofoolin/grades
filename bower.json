@@ -6,8 +6,8 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "foundation": "~5.4.4",
+    "foundation-sites": "^6.2.3",
     "foundation-icon-fonts": "*",
-    "chartjs": "~1.0.1-beta.4"
+    "chart.js": "npm:chart.js#^2.2.2"
   }
 }
