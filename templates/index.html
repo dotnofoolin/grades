@@ -44,10 +44,11 @@
                                 {% for dataset_name in child.chart_data %}
                                     {
                                         label: "{{ dataset_name }}",
-                                        strokeColor : "{{ child.chart_colors[dataset_name] }}",
-                                        pointColor : "{{ child.chart_colors[dataset_name] }}",
-                                        pointStrokeColor : "{{ child.chart_colors[dataset_name] }}",
-                                        data : {{ child.chart_data[dataset_name]|tojson|safe }}
+                                        fill: false,
+                                        borderColor: "{{ child.chart_colors[dataset_name] }}",
+                                        pointBorderColor: "{{ child.chart_colors[dataset_name] }}",
+                                        pointBackgroundColor: "{{ child.chart_colors[dataset_name] }}",
+                                        data: {{ child.chart_data[dataset_name]|tojson|safe }}
                                     },
                                 {% endfor %}
                                 ]
@@ -60,7 +61,7 @@
 
                             $('#accordion-{{ child.child_id }}').on('click', function (event, accordion) {
                                 if($('#accordion-{{ child.child_id }}').hasClass('is-active')) {
-                                    var ctx_{{ child.child_id }} = document.getElementById("linechart-{{ child.child_id }}").getContext("2d");
+                                    var ctx_{{ child.child_id }} = document.getElementById("linechart-{{ child.child_id }}");
                                     var linechart_{{ child.child_id }} = new Chart(ctx_{{ child.child_id }}, { type: 'line', data: lineChartData_{{ child.child_id }}, options: lineChartOptions_{{ child.child_id }} });
                                 }
                             });
